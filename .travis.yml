@@ -1,0 +1,25 @@
+language:
+  ruby
+
+rvm:
+  - '2.0'
+  - '2.1'
+  - '2.2'
+  - ruby-head
+  - jruby-head
+  - rbx
+
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: jruby-head
+    - rvm: rbx
+
+  fast_finish:
+    true
+
+script:
+  rake spec
+
+install:
+  gem install --prerelease --development bismas
