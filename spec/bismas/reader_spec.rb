@@ -1,6 +1,14 @@
 describe Bismas::Reader do
 
   example do
+    expect(described_class.parse_file(data('test.dat')).size).to eq(14)
+  end
+
+  example do
+    expect(described_class.parse_file(data('test.dat'), encoding: Encoding::CP850).size).to eq(14)
+  end
+
+  example do
     expect(described_class.parse_file(data('test.dat'), strict: true)).to eq({
       1  => { "005" => ["Bock, F."], "020" => ["Zur Geschichte des Schlagwortkatalogs in Praxis und Theorie"], "030" => ["Zentralblatt f\x81r Bibliothekswesen. 40(1923), S.494-502."], "055" => ["1923"], "060" => ["Geschichte des Schlagwortkataloges"], "059" => ["d"], "053" => ["a"], "120" => ["D"] },
       2  => { "005" => ["Bravo, B.R. => Rodriguez Bravo, B."], "150" => ["22. 4.2007 19:43:53"] },

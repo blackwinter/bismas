@@ -131,8 +131,10 @@ module Bismas
     end
 
     def amend_encoding(options, default_encoding = DEFAULT_ENCODING)
-      (options[:encoding] ||= default_encoding).tap { |encoding|
-        encoding.prepend(default_encoding) if encoding.start_with?(':') }
+      encoding = options.fetch(:encoding, default_encoding).to_s
+
+      options[:encoding] = encoding.start_with?(':') ?
+        default_encoding.to_s + encoding : encoding
     end
 
   end
