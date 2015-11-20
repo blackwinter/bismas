@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Bismas::Parser - bismas Application documentation (v0.1.0)</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">Object
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-c-parse">::parse</a>
+    
+    <li ><a href="#method-i-error">#error</a>
+    
+    <li ><a href="#method-i-match">#match</a>
+    
+    <li ><a href="#method-i-match_record">#match_record</a>
+    
+    <li ><a href="#method-i-parse">#parse</a>
+    
+    <li ><a href="#method-i-parse_error">#parse_error</a>
+    
+    <li ><a href="#method-i-parse_field">#parse_field</a>
+    
+    <li ><a href="#method-i-parse_record">#parse_record</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Bismas::Parser">
+  <h1 id="class-Bismas::Parser" class="class">
+    class Bismas::Parser
+  </h1>
+
+  <section class="description">
+    <ol><li>
+<p>Each <em>record</em> is terminated by <code>0x0D</code> <code>0x0A</code>
+(<code>CHARS[:newline]</code>).</p>
+</li><li>
+<p>Each <em>record</em> starts with <code>0x01</code>
+(<code>CHARS[:rs]</code>) or, if it&#39;s a deleted <em>record</em>, with
+<code>0xFF</code> (<code>CHARS[:deleted]</code>).</p>
+</li><li>
+<p>Each <em>field</em> is terminated by <code>0x00</code>
+(<code>CHARS[:fs]</code>).</p>
+</li><li>
+<p>Each <em>field</em> starts with the <em>category</em> “number”, a run of
+<code>category_length</code> characters except <code>0x00</code>,
+<code>0x01</code>, <code>0xDB</code> or <code>0xFF</code>; trailing space
+is stripped.</p>
+</li><li>
+<p>The remaining characters of a <em>field</em> form the <em>category</em>
+content; trailing padding <code>0xDB</code> (<code>CHARS[:padding]</code>)
+is stripped.</p>
+</li></ol>
+
+<p>To quote the BISMAS handbook: <em>“Konkret wird bei BISMAS jeder Datensatz
+durch ASCII(1) eingeleitet. Es folgt die erste Kategorienummer mit dem
+Kategorieinhalt. Abgeschlossen wird jede Kategorie mit ASCII(0), danach
+folgt die nächste Kategorienummer und -inhalt usw. Der gesamte Datensatz
+wird mit ASCII (13)(10) abgeschlossen.”</em></p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(options = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 79</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-ivar">@regex</span> = <span class="ruby-constant">Bismas</span>.<span class="ruby-identifier">regex</span>(<span class="ruby-identifier">options</span>)
+
+  <span class="ruby-ivar">@strict</span>, <span class="ruby-ivar">@silent</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-value">:strict</span>, <span class="ruby-value">:silent</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-parse" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse</span><span
+            class="method-args">(io, options = {}, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 74</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">io</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:legacy</span>] <span class="ruby-operator">?</span> <span class="ruby-constant">Legacy</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>
+  <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">io</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-parse" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse</span><span
+            class="method-args">(io, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 85</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">io</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@input</span> = <span class="ruby-constant">StringScanner</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;&#39;</span>)
+
+  <span class="ruby-identifier">io</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">input</span><span class="ruby-operator">|</span>
+    <span class="ruby-ivar">@input</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>
+
+    <span class="ruby-identifier">parse_record</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">while</span> <span class="ruby-ivar">@input</span>.<span class="ruby-identifier">check_until</span>(<span class="ruby-ivar">@regex</span>[<span class="ruby-value">:newline</span>])
+    <span class="ruby-ivar">@input</span>.<span class="ruby-identifier">string</span> = <span class="ruby-ivar">@input</span>.<span class="ruby-identifier">string</span>.<span class="ruby-identifier">byteslice</span>(<span class="ruby-ivar">@input</span>.<span class="ruby-identifier">pos</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>)
+  }
+
+  <span class="ruby-identifier">error</span>(<span class="ruby-string">&#39;Unexpected data&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@input</span>.<span class="ruby-identifier">eos?</span>
+
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-parse_field" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_field</span><span
+            class="method-args">() { |k, v| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse_field-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 115</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_field</span>
+  <span class="ruby-identifier">k</span> = <span class="ruby-identifier">match</span>(<span class="ruby-value">:category</span>, <span class="ruby-value">0</span>) <span class="ruby-keyword">and</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">rstrip!</span>
+
+  <span class="ruby-identifier">v</span> = <span class="ruby-identifier">match</span>(<span class="ruby-value">:field</span>, <span class="ruby-value">1</span>) <span class="ruby-keyword">or</span> <span class="ruby-identifier">error</span>(<span class="ruby-identifier">k</span> <span class="ruby-operator">?</span>
+    <span class="ruby-node">&quot;Unclosed field `#{k}&#39;&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;Unexpected data&#39;</span>, <span class="ruby-value">:rest</span>)
+
+  <span class="ruby-identifier">k</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">block_given?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span>) <span class="ruby-operator">:</span> [<span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span>] <span class="ruby-operator">:</span>
+    <span class="ruby-identifier">v</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">error</span>(<span class="ruby-string">&#39;Malformed field&#39;</span>, <span class="ruby-value">:field</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-parse_record" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_record</span><span
+            class="method-args">() { |r| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse_record-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 100</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_record</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>(<span class="ruby-value">:deleted</span>)
+    <span class="ruby-identifier">match</span>(<span class="ruby-value">:skip_line</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">match_record</span>
+    <span class="ruby-identifier">error</span>(<span class="ruby-string">&#39;Malformed record&#39;</span>, <span class="ruby-value">:line</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">h</span>, <span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">k</span>] = [] }
+  <span class="ruby-identifier">parse_field</span>  { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>[<span class="ruby-identifier">k</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span> } <span class="ruby-keyword">until</span> <span class="ruby-identifier">match</span>(<span class="ruby-value">:newline</span>)
+
+  <span class="ruby-identifier">block_given?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">r</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">r</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="private-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Private Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-error" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">error</span><span
+            class="method-args">(message, skip = nil)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="error-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 136</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">error</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">skip</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">err</span> = <span class="ruby-identifier">parse_error</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-identifier">err</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">skip</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@strict</span>
+
+  <span class="ruby-identifier">warn</span> <span class="ruby-identifier">err</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@silent</span>
+  <span class="ruby-identifier">match</span>(<span class="ruby-value">:&quot;skip_#{skip}&quot;</span>)
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-match" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">match</span><span
+            class="method-args">(key, index = nil)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="match-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 127</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">match</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">index</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@input</span>.<span class="ruby-identifier">skip</span>(<span class="ruby-ivar">@regex</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">key</span>))
+  <span class="ruby-identifier">res</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">index</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@input</span>[<span class="ruby-identifier">index</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">res</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-match_record" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">match_record</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="match_record-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_record</span>
+  <span class="ruby-identifier">match</span>(<span class="ruby-value">:rs</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-parse_error" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_error</span><span
+            class="method-args">(message)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse_error-source">
+            <pre><span class="ruby-comment"># File lib/bismas/parser.rb, line 145</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_error</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-constant">ParseError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@input</span>, <span class="ruby-identifier">message</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
