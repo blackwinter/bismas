@@ -27,4 +27,4 @@
 #++
 
 require 'bismas/cli'
-Bismas::CLI.execute
+Bismas::CLI::Filter.execute

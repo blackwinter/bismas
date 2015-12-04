@@ -31,109 +31,22 @@ module Bismas
 
   class CLI < Cyclops
 
-    TYPES = %w[dat dbm]
-
-    class << self
-
-      def defaults
-        super.merge(
-          config:     'config.yaml',
-          input:      '-',
-          output:     '-',
-          type:       TYPES.first,
-          key_format: '%s'
-        )
-      end
-
+    def self.defaults
+      super.merge(
+        config: "#{name.split('::').last.downcase}.yaml",
+        input:  '-',
+        output: '-'
+      )
     end
 
-    def run(arguments)
-      quit unless arguments.empty?
-
-      klass = case type = options[:type]
-        when 'dat'
-          Writer
-        when 'dbm'
-          require 'midos'
-          options[:output_encoding] ||= Midos::DEFAULT_ENCODING
-          Midos::Writer
-        else
-          quit "Unsupported type: #{type}. Must be one of: #{TYPES.join(', ')}."
-      end
-
-      Bismas.filter(klass, options, &method(:quit))
+    def require_gem(gem, lib = gem)
+      require lib
     rescue LoadError => err
-      abort "Please install the `#{File.dirname(err.path)}' gem. (#{err})"
-    end
-
-    private
-
-    def opts(opts)
-      opts.option(:input__FILE, 'Path to input file [Default: STDIN]')
-
-      opts.option(:output__FILE, 'Path to output file [Default: STDOUT]')
-
-      opts.separator
-      opts.separator 'Writer options:'
-
-      opts.option(:type__TYPE, "Output file type (#{TYPES.join(', ')}) [Default: #{TYPES.first}]")
-
-      opts.separator
-
-      opts.option(:output_encoding__ENCODING, :n, 'Output encoding [Default: depends on TYPE]')
-
-      opts.separator
-
-      opts.option(:output_key__KEY, :k, 'ID key of output file')
-      opts.option(:key_format__KEY_FORMAT, :f, 'Key format [Default: %s]')
-
-      opts.separator
-
-      opts.option(:mapping__FILE_OR_YAML, 'Path to mapping file or YAML string')
-
-      opts.separator
-
-      opts.switch(:sort, 'Sort each record')
-
-      opts.separator
-
-      opts.option(:execute__CODE, 'Code to execute for each _record_ before mapping') { |e|
-        options[:execute] << e
-      }
-
-      opts.option(:execute_mapped__CODE, :E, 'Code to execute for each _record_ after mapping') { |e|
-        options[:execute_mapped] << e
-      }
-
-      opts.separator
-
-      opts.option(:padding_length__LENGTH, :P, Integer, "Length of padding for TYPE=dat [Default: #{DEFAULT_PADDING_LENGTH}]")
-
-      opts.separator
-      opts.separator 'Reader options:'
-
-      opts.option(:input_encoding__ENCODING, :N, "Input encoding [Default: #{DEFAULT_ENCODING}]")
-
-      opts.separator
-
-      opts.option(:input_key__KEY, :K, 'ID key of input file')
-
-      opts.separator
-
-      opts.switch(:strict, :S, 'Turn parse warnings into errors')
-
-      opts.switch(:silent, :T, 'Silence parse warnings')
-
-      opts.separator
-
-      opts.switch(:legacy, :L, 'Use the legacy parser')
-
-      opts.separator
-      opts.separator 'Common options:'
-
-      opts.option(:category_length__LENGTH, :C, Integer, "Length of category for TYPE=dat [Default: #{DEFAULT_CATEGORY_LENGTH}]")
+      abort "Please install the `#{gem}' gem. (#{err})"
     end
 
   end
 
 end
+
+require_relative 'cli/filter'
