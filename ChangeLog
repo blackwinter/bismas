@@ -2,6 +2,11 @@
 
 = Revision history for bismas
 
+== 0.3.0 [unreleased]
+
+* Fixed Bismas.amend_encoding to use default encoding when encoding option is
+  +nil+.
+
 == 0.2.0 [2015-12-03]
 
 * Added <tt>.CAT</tt> parser.

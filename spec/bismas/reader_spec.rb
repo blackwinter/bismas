@@ -1,15 +1,27 @@
 describe Bismas::Reader do
 
-  example do
-    expect(described_class.parse_file(data('test.dat')).size).to eq(14)
+  def parse_file(options = {})
+    described_class.parse_file(data('test.dat'), options)
   end
 
   example do
-    expect(described_class.parse_file(data('test.dat'), encoding: Encoding::CP850).size).to eq(14)
+    expect(parse_file.size).to eq(14)
   end
 
   example do
-    expect(described_class.parse_file(data('test.dat'), strict: true)).to eq({
+    expect(parse_file(encoding: nil).size).to eq(14)
+  end
+
+  example do
+    expect(parse_file(encoding: Encoding::CP850).size).to eq(14)
+  end
+
+  example do
+    expect{silence{parse_file(encoding: '')}}.to raise_error(TypeError, 'no implicit conversion of nil into String')
+  end
+
+  example do
+    expect(parse_file(strict: true)).to eq({
       1  => { "005" => ["Bock, F."], "020" => ["Zur Geschichte des Schlagwortkatalogs in Praxis und Theorie"], "030" => ["Zentralblatt f\x81r Bibliothekswesen. 40(1923), S.494-502."], "055" => ["1923"], "060" => ["Geschichte des Schlagwortkataloges"], "059" => ["d"], "053" => ["a"], "120" => ["D"] },
       2  => { "005" => ["Bravo, B.R. => Rodriguez Bravo, B."], "150" => ["22. 4.2007 19:43:53"] },
       3  => { "005" => ["Simmons, P."], "020" => ["Microcomputer software for ISO 2709 record conversion"], "030" => ["Microcomputers for information management. 6(1989), S.197-205."], "055" => ["1989"], "060" => ["Bibliographische Software"], "053" => ["a"], "059" => ["e"], "100" => ["ISO 2709"], "065" => ["Datenformate"] },

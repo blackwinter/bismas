@@ -1,6 +1,7 @@
 $:.unshift('lib') unless $:.first == 'lib'
 
 require 'bismas'
+require 'nuggets/object/silence'
 
 RSpec.configure { |config|
   config.include(Module.new {
