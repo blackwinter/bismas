@@ -26,32 +26,50 @@
 
 module Bismas
 
-  class Categories
+  class Schema
 
     FIELD_RE = %r{\Afeld\s+=\s+(\d+)}i
 
     CATEGORY_RE = lambda { |category_length|
       %r{\A(.{#{category_length}})"(.+?)"} }
 
-    def self.parse_file(file, options = {})
-      Bismas.amend_encoding(options)
+    class << self
 
-      categories, category_re = new, nil
+      def parse(*args)
+        new.parse(*args)
+      end
 
-      File.foreach(file, options) { |line|
-        case line
-          when FIELD_RE
-            category_re = CATEGORY_RE[$1.to_i]
-          when category_re
-            categories[$1.strip] = $2.strip
-        end
-      }
+      def parse_file(file, options = {})
+        Bismas.amend_encoding(options)
+        File.open(file, 'rb', options, &method(:parse))
+      end
 
-      categories
     end
 
     def initialize
-      @categories = {}
+      @title, @name, @category_length, @categories = nil, nil, nil, {}
+    end
+
+    attr_accessor :title, :name, :category_length
+
+    def parse(io)
+      category_re = nil
+
+      io.each { |line|
+        case line
+          when category_re
+            self[$1.strip] = $2.strip
+          when FIELD_RE
+            category_re = CATEGORY_RE[
+              self.category_length = $1.to_i]
+          when String
+            title ? name ? nil :
+              self.name  = line.strip :
+              self.title = line.strip
+        end
+      }
+
+      self
     end
 
     def categories
@@ -64,10 +82,6 @@ module Bismas
 
     def []=(key, value)
       @categories[key] = value
-    end
-
-    def to_h
-      @categories
     end
 
   end

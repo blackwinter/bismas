@@ -1,0 +1,64 @@
+Literatur zur Inhaltserschlieáung
+LIT
+#PARAMETER#
+Feld = 4
+#INDEX#
+#Kategorien#
+005 "    1. Verfasser"!
+010 "    2. Verfasser"
+015 "    3. Verfasser" W
+017 "     Herausgeber" W
+020 "  Hauptsachtitel"!
+025 "      Zusatz HST"
+027 "  Ausgabevermerk"
+030 "          Quelle"!
+035 "     Serientitel"
+045 "      Verlagsort"
+050 "          Verlag"
+051 "          Umfang"
+052 "            ISBN" W
+053 "          Doktyp"! W
+055 "Erscheinungsjahr"!
+056 "        Abstract"! W
+057 "          Inhalt" W
+058 "         Fuánote" W
+059 "         Sprache"! W
+060 "   Themenbereich"! N
+065 "   Themenbereich" N
+070 "   Themenbereich" N W
+080 " Behandelte Form"!N W
+100 "          Objekt"!
+101 "          Objekt"
+102 "          Objekt"
+103 "          Objekt" 
+104 "          Objekt"
+105 "          Objekt"
+106 "          Objekt"
+107 "          Objekt"
+108 "          Objekt"
+109 "          Objekt" W
+110 "     Hilfsmittel"! W
+115 "      Fachgebiet"! N W
+120 "        Land/Ort"! W
+122 "          Sparte" N W
+125 "        Signatur" W
+130 "             DDC" W
+131 "             LCC" W
+132 "             RVK" W
+133 "              BK" W
+134 "Eppelsheimer SBB" W
+135 "            RSWK" W
+136 "            LCSH" W
+137 "          PRECIS" W
+138 "         COMPASS" W
+139 "            GHBS" W
+140 "   Biographierte" W
+141 "             ASB" W
+142 "             SSD" W
+143 "             SfB" W
+144 "             KAB" W
+145 "            Bild" B("" "d:\Irfan\i_view32.exe cat$") W
+146 "       Abbildung" N
+148 "      Einstufung" N W
+150 "          Datum1"! DC
+152 "          Datum2" DM

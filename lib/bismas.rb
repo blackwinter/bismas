@@ -142,8 +142,8 @@ module Bismas
 end
 
 require_relative 'bismas/base'
+require_relative 'bismas/schema'
 require_relative 'bismas/reader'
 require_relative 'bismas/writer'
 require_relative 'bismas/mapping'
-require_relative 'bismas/categories'
 require_relative 'bismas/version'
