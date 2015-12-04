@@ -1,3 +1,5 @@
+#! /usr/bin/env ruby
+
 #--
 ###############################################################################
 #                                                                             #
@@ -24,30 +26,5 @@
 ###############################################################################
 #++
 
-require 'cyclops'
-require 'bismas'
-
-module Bismas
-
-  class CLI < Cyclops
-
-    def self.defaults
-      super.merge(
-        config: "#{name.split('::').last.downcase}.yaml",
-        input:  '-',
-        output: '-'
-      )
-    end
-
-    def require_gem(gem, lib = gem)
-      require lib
-    rescue LoadError => err
-      abort "Please install the `#{gem}' gem. (#{err})"
-    end
-
-  end
-
-end
-
-require_relative 'cli/filter'
-require_relative 'cli/xml'
+require 'bismas/cli'
+Bismas::CLI::XML.execute

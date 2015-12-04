@@ -24,30 +24,74 @@
 ###############################################################################
 #++
 
-require 'cyclops'
-require 'bismas'
-
 module Bismas
 
-  class CLI < Cyclops
+  class CLI
 
-    def self.defaults
-      super.merge(
-        config: "#{name.split('::').last.downcase}.yaml",
-        input:  '-',
-        output: '-'
-      )
-    end
+    class XML < self
 
-    def require_gem(gem, lib = gem)
-      require lib
-    rescue LoadError => err
-      abort "Please install the `#{gem}' gem. (#{err})"
+      def run(arguments)
+        require_gem 'builder'
+
+        quit unless arguments.empty?
+
+        quit 'Schema file is required' unless schema_file = options[:schema]
+        quit "No such file: #{schema_file}" unless File.readable?(schema_file)
+
+        schema = Schema.parse_file(schema_file)
+
+        reader_options = {
+          encoding:        options[:encoding],
+          key:             options[:key],
+          strict:          options[:strict],
+          silent:          options[:silent],
+          category_length: schema.category_length
+        }
+
+        File.open_file(options[:output], {}, 'wb') { |f|
+          xml = Builder::XmlMarkup.new(indent: 2, target: f)
+          xml.instruct!
+
+          xml.records(name: schema.name, description: schema.title) {
+            Reader.parse_file(options[:input], reader_options) { |id, record|
+              xml.record(id: id) {
+                record.sort_by { |key,| key }.each { |key, values|
+                  values.each { |value|
+                    xml.field(value, name: key, description: schema[key])
+                  }
+                }
+              }
+            }
+          }
+        }
+      end
+
+      private
+
+      def opts(opts)
+        opts.option(:input__FILE, 'Path to input file [Default: STDIN]')
+
+        opts.option(:output__FILE, 'Path to output file [Default: STDOUT]')
+
+        opts.option(:schema__FILE, 'Path to schema file [Required]')
+
+        opts.separator
+
+        opts.option(:encoding__ENCODING, :N, "Input encoding [Default: #{DEFAULT_ENCODING}]")
+
+        opts.separator
+
+        opts.option(:key__KEY, :K, 'ID key of input file')
+
+        opts.separator
+
+        opts.switch(:strict, :S, 'Turn parse warnings into errors')
+
+        opts.switch(:silent, :T, 'Silence parse warnings')
+      end
+
     end
 
   end
 
 end
-
-require_relative 'cli/filter'
-require_relative 'cli/xml'
