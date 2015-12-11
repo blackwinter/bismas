@@ -2,7 +2,7 @@
 
 = Revision history for bismas
 
-== 0.3.0 [unreleased]
+== 0.3.0 [2015-12-11]
 
 * Added +bismas2xml+ executable.
 * Added +bismas-chardiff+ executable.
