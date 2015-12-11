@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Bismas::CLI - bismas Application documentation (v0.2.0)</title>
+<title>class Bismas::CLI - bismas Application documentation (v0.3.0)</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "../";
@@ -72,9 +72,7 @@
     
     <li class="calls-super" ><a href="#method-c-defaults">::defaults</a>
     
-    <li ><a href="#method-i-opts">#opts</a>
-    
-    <li ><a href="#method-i-run">#run</a>
+    <li ><a href="#method-i-require_gem">#require_gem</a>
     
   </ul>
 </div>
@@ -99,20 +97,6 @@
 
     
 
-    
-    <section class="constants-list">
-      <header>
-        <h3>Constants</h3>
-      </header>
-      <dl>
-      
-        <dt id="TYPES">TYPES
-        
-        <dd>
-        
-      
-      </dl>
-    </section>
     
 
     
@@ -148,14 +132,12 @@
 
           
           <div class="method-source-code" id="defaults-source">
-            <pre><span class="ruby-comment"># File lib/bismas/cli.rb, line 38</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">defaults</span>
+            <pre><span class="ruby-comment"># File lib/bismas/cli.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">defaults</span>
   <span class="ruby-keyword">super</span>.<span class="ruby-identifier">merge</span>(
-    <span class="ruby-identifier">config</span><span class="ruby-operator">:</span>     <span class="ruby-string">&#39;config.yaml&#39;</span>,
-    <span class="ruby-identifier">input</span><span class="ruby-operator">:</span>      <span class="ruby-string">&#39;-&#39;</span>,
-    <span class="ruby-identifier">output</span><span class="ruby-operator">:</span>     <span class="ruby-string">&#39;-&#39;</span>,
-    <span class="ruby-identifier">type</span><span class="ruby-operator">:</span>       <span class="ruby-constant">TYPES</span>.<span class="ruby-identifier">first</span>,
-    <span class="ruby-identifier">key_format</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;%s&#39;</span>
+    <span class="ruby-identifier">config</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{name.split(&#39;::&#39;).last.downcase}.yaml&quot;</span>,
+    <span class="ruby-identifier">input</span><span class="ruby-operator">:</span>  <span class="ruby-string">&#39;-&#39;</span>,
+    <span class="ruby-identifier">output</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;-&#39;</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -176,11 +158,11 @@
        </header>
 
     
-      <div id="method-i-run" class="method-detail ">
+      <div id="method-i-require_gem" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">run</span><span
-            class="method-args">(arguments)</span>
+          <span class="method-name">require_gem</span><span
+            class="method-args">(gem, lib = gem)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -194,128 +176,12 @@
           
 
           
-          <div class="method-source-code" id="run-source">
-            <pre><span class="ruby-comment"># File lib/bismas/cli.rb, line 50</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">arguments</span>)
-  <span class="ruby-identifier">quit</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">arguments</span>.<span class="ruby-identifier">empty?</span>
-
-  <span class="ruby-identifier">klass</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:type</span>]
-    <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;dat&#39;</span>
-      <span class="ruby-constant">Writer</span>
-    <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;dbm&#39;</span>
-      <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;midos&#39;</span>
-      <span class="ruby-identifier">options</span>[<span class="ruby-value">:output_encoding</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Midos</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_ENCODING</span>
-      <span class="ruby-constant">Midos</span><span class="ruby-operator">::</span><span class="ruby-constant">Writer</span>
-    <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">quit</span> <span class="ruby-node">&quot;Unsupported type: #{type}. Must be one of: #{TYPES.join(&#39;, &#39;)}.&quot;</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-constant">Bismas</span>.<span class="ruby-identifier">filter</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">method</span>(<span class="ruby-value">:quit</span>))
+          <div class="method-source-code" id="require_gem-source">
+            <pre><span class="ruby-comment"># File lib/bismas/cli.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">require_gem</span>(<span class="ruby-identifier">gem</span>, <span class="ruby-identifier">lib</span> = <span class="ruby-identifier">gem</span>)
+  <span class="ruby-identifier">require</span> <span class="ruby-identifier">lib</span>
 <span class="ruby-keyword">rescue</span> <span class="ruby-constant">LoadError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">err</span>
-  <span class="ruby-identifier">abort</span> <span class="ruby-node">&quot;Please install the `#{File.dirname(err.path)}&#39; gem. (#{err})&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-    </section>
-  
-     <section id="private-instance-5Buntitled-5D-method-details" class="method-section">
-       <header>
-         <h3>Private Instance Methods</h3>
-       </header>
-
-    
-      <div id="method-i-opts" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">opts</span><span
-            class="method-args">(opts)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-          
-
-          
-          <div class="method-source-code" id="opts-source">
-            <pre><span class="ruby-comment"># File lib/bismas/cli.rb, line 71</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">opts</span>(<span class="ruby-identifier">opts</span>)
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:input__FILE</span>, <span class="ruby-string">&#39;Path to input file [Default: STDIN]&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:output__FILE</span>, <span class="ruby-string">&#39;Path to output file [Default: STDOUT]&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-string">&#39;Writer options:&#39;</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:type__TYPE</span>, <span class="ruby-node">&quot;Output file type (#{TYPES.join(&#39;, &#39;)}) [Default: #{TYPES.first}]&quot;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:output_encoding__ENCODING</span>, <span class="ruby-value">:n</span>, <span class="ruby-string">&#39;Output encoding [Default: depends on TYPE]&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:output_key__KEY</span>, <span class="ruby-value">:k</span>, <span class="ruby-string">&#39;ID key of output file&#39;</span>)
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:key_format__KEY_FORMAT</span>, <span class="ruby-value">:f</span>, <span class="ruby-string">&#39;Key format [Default: %s]&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:mapping__FILE_OR_YAML</span>, <span class="ruby-string">&#39;Path to mapping file or YAML string&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">switch</span>(<span class="ruby-value">:sort</span>, <span class="ruby-string">&#39;Sort each record&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:execute__CODE</span>, <span class="ruby-string">&#39;Code to execute for each _record_ before mapping&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">options</span>[<span class="ruby-value">:execute</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">e</span>
-  }
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:execute_mapped__CODE</span>, <span class="ruby-value">:E</span>, <span class="ruby-string">&#39;Code to execute for each _record_ after mapping&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">options</span>[<span class="ruby-value">:execute_mapped</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">e</span>
-  }
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:padding_length__LENGTH</span>, <span class="ruby-value">:P</span>, <span class="ruby-constant">Integer</span>, <span class="ruby-node">&quot;Length of padding for TYPE=dat [Default: #{DEFAULT_PADDING_LENGTH}]&quot;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-string">&#39;Reader options:&#39;</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:input_encoding__ENCODING</span>, <span class="ruby-value">:N</span>, <span class="ruby-node">&quot;Input encoding [Default: #{DEFAULT_ENCODING}]&quot;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:input_key__KEY</span>, <span class="ruby-value">:K</span>, <span class="ruby-string">&#39;ID key of input file&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">switch</span>(<span class="ruby-value">:strict</span>, <span class="ruby-value">:S</span>, <span class="ruby-string">&#39;Turn parse warnings into errors&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">switch</span>(<span class="ruby-value">:silent</span>, <span class="ruby-value">:T</span>, <span class="ruby-string">&#39;Silence parse warnings&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">switch</span>(<span class="ruby-value">:legacy</span>, <span class="ruby-value">:L</span>, <span class="ruby-string">&#39;Use the legacy parser&#39;</span>)
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-string">&#39;Common options:&#39;</span>
-
-  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:category_length__LENGTH</span>, <span class="ruby-value">:C</span>, <span class="ruby-constant">Integer</span>, <span class="ruby-node">&quot;Length of category for TYPE=dat [Default: #{DEFAULT_CATEGORY_LENGTH}]&quot;</span>)
+  <span class="ruby-identifier">abort</span> <span class="ruby-node">&quot;Please install the `#{gem}&#39; gem. (#{err})&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

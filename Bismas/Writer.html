@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Bismas::Writer - bismas Application documentation (v0.2.0)</title>
+<title>class Bismas::Writer - bismas Application documentation (v0.3.0)</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "../";
@@ -457,9 +457,11 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">write_i</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">record</span>, <span class="ruby-identifier">io</span> = <span class="ruby-identifier">io</span>())
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">empty?</span>
 
-  <span class="ruby-identifier">category_format</span>, <span class="ruby-identifier">fs</span> = <span class="ruby-node">&quot;%-#{@category_length}s&quot;</span>, <span class="ruby-ivar">@chars</span>[<span class="ruby-value">:fs</span>]
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">record</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-identifier">record</span> = { <span class="ruby-identifier">key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">auto_id</span>.<span class="ruby-identifier">call</span> }.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">record</span>)
+  <span class="ruby-keyword">end</span>
 
-  <span class="ruby-identifier">record</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">id</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">auto_id</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">record</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">key</span>)
+  <span class="ruby-identifier">category_format</span>, <span class="ruby-identifier">fs</span> = <span class="ruby-node">&quot;%-#{@category_length}s&quot;</span>, <span class="ruby-ivar">@chars</span>[<span class="ruby-value">:fs</span>]
 
   <span class="ruby-identifier">io</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@chars</span>[<span class="ruby-value">:rs</span>]
 

@@ -1,13 +1,16 @@
-Thu, 03 Dec 2015 15:09:10 +0100
-README	Thu, 03 Dec 2015 15:07:45 +0100
+Fri, 11 Dec 2015 12:10:58 +0100
+README	Fri, 11 Dec 2015 12:10:01 +0100
 COPYING	Thu, 17 Sep 2015 12:44:26 +0200
-ChangeLog	Thu, 03 Dec 2015 15:08:42 +0100
-lib/bismas.rb	Thu, 03 Dec 2015 14:41:01 +0100
-lib/bismas/cli.rb	Tue, 10 Nov 2015 12:29:31 +0100
+ChangeLog	Fri, 11 Dec 2015 12:09:56 +0100
+lib/bismas.rb	Fri, 04 Dec 2015 12:34:07 +0100
+lib/bismas/cli.rb	Fri, 11 Dec 2015 12:09:23 +0100
 lib/bismas/base.rb	Wed, 28 Oct 2015 12:53:38 +0100
 lib/bismas/parser.rb	Wed, 28 Oct 2015 12:53:57 +0100
 lib/bismas/reader.rb	Thu, 01 Oct 2015 13:50:54 +0200
-lib/bismas/writer.rb	Wed, 28 Oct 2015 12:54:09 +0100
+lib/bismas/schema.rb	Fri, 04 Dec 2015 12:31:03 +0100
+lib/bismas/writer.rb	Fri, 11 Dec 2015 12:09:23 +0100
+lib/bismas/cli/xml.rb	Fri, 11 Dec 2015 11:28:17 +0100
 lib/bismas/mapping.rb	Wed, 30 Sep 2015 15:59:10 +0200
-lib/bismas/version.rb	Thu, 03 Dec 2015 15:07:19 +0100
-lib/bismas/categories.rb	Thu, 03 Dec 2015 15:02:33 +0100
+lib/bismas/version.rb	Fri, 11 Dec 2015 12:10:07 +0100
+lib/bismas/cli/filter.rb	Fri, 11 Dec 2015 11:28:17 +0100
+lib/bismas/cli/chardiff.rb	Fri, 11 Dec 2015 12:09:23 +0100

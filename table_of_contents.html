@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>Table of Contents - bismas Application documentation (v0.2.0)</title>
+<title>Table of Contents - bismas Application documentation (v0.3.0)</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "./";
@@ -20,7 +20,7 @@
 
 <body id="top" class="table-of-contents">
 <main role="main">
-<h1 class="class">Table of Contents - bismas Application documentation (v0.2.0)</h1>
+<h1 class="class">Table of Contents - bismas Application documentation (v0.3.0)</h1>
 
 <h2 id="pages">Pages</h2>
 <ul>
@@ -36,6 +36,7 @@
 
     <ul>
       <li><a href="ChangeLog.html#label-Revision+history+for+bismas">Revision history for bismas</a>
+      <li><a href="ChangeLog.html#label-0.3.0+-5B2015-12-11-5D">0.3.0 [2015-12-11]</a>
       <li><a href="ChangeLog.html#label-0.2.0+-5B2015-12-03-5D">0.2.0 [2015-12-03]</a>
       <li><a href="ChangeLog.html#label-0.1.0+-5B2015-11-20-5D">0.1.0 [2015-11-20]</a>
       <li><a href="ChangeLog.html#label-0.0.0+-5B2015-09-17-5D">0.0.0 [2015-09-17]</a>
@@ -68,7 +69,13 @@
     <a href="Bismas/CLI.html">Bismas::CLI</a>
   </li>
   <li class="class">
-    <a href="Bismas/Categories.html">Bismas::Categories</a>
+    <a href="Bismas/CLI/Chardiff.html">Bismas::CLI::Chardiff</a>
+  </li>
+  <li class="class">
+    <a href="Bismas/CLI/Filter.html">Bismas::CLI::Filter</a>
+  </li>
+  <li class="class">
+    <a href="Bismas/CLI/XML.html">Bismas::CLI::XML</a>
   </li>
   <li class="class">
     <a href="Bismas/Mapping.html">Bismas::Mapping</a>
@@ -84,6 +91,9 @@
   </li>
   <li class="class">
     <a href="Bismas/Reader.html">Bismas::Reader</a>
+  </li>
+  <li class="class">
+    <a href="Bismas/Schema.html">Bismas::Schema</a>
   </li>
   <li class="module">
     <a href="Bismas/Version.html">Bismas::Version</a>
@@ -117,6 +127,16 @@
     <span class="container">Bismas::CLI</span>
 
   <li class="method">
+    <a href="Bismas/CLI/Chardiff.html#method-c-defaults">::defaults</a>
+    &mdash;
+    <span class="container">Bismas::CLI::Chardiff</span>
+
+  <li class="method">
+    <a href="Bismas/CLI/Filter.html#method-c-defaults">::defaults</a>
+    &mdash;
+    <span class="container">Bismas::CLI::Filter</span>
+
+  <li class="method">
     <a href="Bismas.html#method-c-encode">::encode</a>
     &mdash;
     <span class="container">Bismas</span>
@@ -142,11 +162,6 @@
     <span class="container">Bismas::Base</span>
 
   <li class="method">
-    <a href="Bismas/Categories.html#method-c-new">::new</a>
-    &mdash;
-    <span class="container">Bismas::Categories</span>
-
-  <li class="method">
     <a href="Bismas/Mapping.html#method-c-new">::new</a>
     &mdash;
     <span class="container">Bismas::Mapping</span>
@@ -165,6 +180,11 @@
     <a href="Bismas/Parser/ParseError.html#method-c-new">::new</a>
     &mdash;
     <span class="container">Bismas::Parser::ParseError</span>
+
+  <li class="method">
+    <a href="Bismas/Schema.html#method-c-new">::new</a>
+    &mdash;
+    <span class="container">Bismas::Schema</span>
 
   <li class="method">
     <a href="Bismas/Writer.html#method-c-new">::new</a>
@@ -187,14 +207,19 @@
     <span class="container">Bismas::Reader</span>
 
   <li class="method">
-    <a href="Bismas/Categories.html#method-c-parse_file">::parse_file</a>
+    <a href="Bismas/Schema.html#method-c-parse">::parse</a>
     &mdash;
-    <span class="container">Bismas::Categories</span>
+    <span class="container">Bismas::Schema</span>
 
   <li class="method">
     <a href="Bismas/Reader.html#method-c-parse_file">::parse_file</a>
     &mdash;
     <span class="container">Bismas::Reader</span>
+
+  <li class="method">
+    <a href="Bismas/Schema.html#method-c-parse_file">::parse_file</a>
+    &mdash;
+    <span class="container">Bismas::Schema</span>
 
   <li class="method">
     <a href="Bismas.html#method-c-regex">::regex</a>
@@ -227,19 +252,19 @@
     <span class="container">Bismas::Writer</span>
 
   <li class="method">
-    <a href="Bismas/Categories.html#method-i-5B-5D">#[]</a>
-    &mdash;
-    <span class="container">Bismas::Categories</span>
-
-  <li class="method">
     <a href="Bismas/Mapping.html#method-i-5B-5D">#[]</a>
     &mdash;
     <span class="container">Bismas::Mapping</span>
 
   <li class="method">
-    <a href="Bismas/Categories.html#method-i-5B-5D-3D">#[]=</a>
+    <a href="Bismas/Schema.html#method-i-5B-5D">#[]</a>
     &mdash;
-    <span class="container">Bismas::Categories</span>
+    <span class="container">Bismas::Schema</span>
+
+  <li class="method">
+    <a href="Bismas/Schema.html#method-i-5B-5D-3D">#[]=</a>
+    &mdash;
+    <span class="container">Bismas::Schema</span>
 
   <li class="method">
     <a href="Bismas/Writer.html#method-i-5B-5D-3D">#[]=</a>
@@ -257,9 +282,9 @@
     <span class="container">Bismas::Mapping</span>
 
   <li class="method">
-    <a href="Bismas/Categories.html#method-i-categories">#categories</a>
+    <a href="Bismas/Schema.html#method-i-categories">#categories</a>
     &mdash;
-    <span class="container">Bismas::Categories</span>
+    <span class="container">Bismas::Schema</span>
 
   <li class="method">
     <a href="Bismas/Base.html#method-i-default_auto_id">#default_auto_id</a>
@@ -302,9 +327,19 @@
     <span class="container">Bismas::Parser::Legacy</span>
 
   <li class="method">
-    <a href="Bismas/CLI.html#method-i-opts">#opts</a>
+    <a href="Bismas/CLI/Chardiff.html#method-i-opts">#opts</a>
     &mdash;
-    <span class="container">Bismas::CLI</span>
+    <span class="container">Bismas::CLI::Chardiff</span>
+
+  <li class="method">
+    <a href="Bismas/CLI/Filter.html#method-i-opts">#opts</a>
+    &mdash;
+    <span class="container">Bismas::CLI::Filter</span>
+
+  <li class="method">
+    <a href="Bismas/CLI/XML.html#method-i-opts">#opts</a>
+    &mdash;
+    <span class="container">Bismas::CLI::XML</span>
 
   <li class="method">
     <a href="Bismas/Parser.html#method-i-parse">#parse</a>
@@ -315,6 +350,11 @@
     <a href="Bismas/Reader.html#method-i-parse">#parse</a>
     &mdash;
     <span class="container">Bismas::Reader</span>
+
+  <li class="method">
+    <a href="Bismas/Schema.html#method-i-parse">#parse</a>
+    &mdash;
+    <span class="container">Bismas::Schema</span>
 
   <li class="method">
     <a href="Bismas/Parser.html#method-i-parse_error">#parse_error</a>
@@ -342,6 +382,11 @@
     <span class="container">Bismas::Mapping</span>
 
   <li class="method">
+    <a href="Bismas/CLI.html#method-i-require_gem">#require_gem</a>
+    &mdash;
+    <span class="container">Bismas::CLI</span>
+
+  <li class="method">
     <a href="Bismas/Base.html#method-i-reset">#reset</a>
     &mdash;
     <span class="container">Bismas::Base</span>
@@ -352,14 +397,19 @@
     <span class="container">Bismas::Reader</span>
 
   <li class="method">
-    <a href="Bismas/CLI.html#method-i-run">#run</a>
+    <a href="Bismas/CLI/Chardiff.html#method-i-run">#run</a>
     &mdash;
-    <span class="container">Bismas::CLI</span>
+    <span class="container">Bismas::CLI::Chardiff</span>
 
   <li class="method">
-    <a href="Bismas/Categories.html#method-i-to_h">#to_h</a>
+    <a href="Bismas/CLI/Filter.html#method-i-run">#run</a>
     &mdash;
-    <span class="container">Bismas::Categories</span>
+    <span class="container">Bismas::CLI::Filter</span>
+
+  <li class="method">
+    <a href="Bismas/CLI/XML.html#method-i-run">#run</a>
+    &mdash;
+    <span class="container">Bismas::CLI::XML</span>
 
   <li class="method">
     <a href="Bismas/Parser/ParseError.html#method-i-to_s">#to_s</a>

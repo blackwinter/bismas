@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Bismas::Categories - bismas Application documentation (v0.2.0)</title>
+<title>class Bismas::Schema - bismas Application documentation (v0.3.0)</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "../";
@@ -72,6 +72,8 @@
     
     <li ><a href="#method-c-new">::new</a>
     
+    <li ><a href="#method-c-parse">::parse</a>
+    
     <li ><a href="#method-c-parse_file">::parse_file</a>
     
     <li ><a href="#method-i-5B-5D">#[]</a>
@@ -80,7 +82,7 @@
     
     <li ><a href="#method-i-categories">#categories</a>
     
-    <li ><a href="#method-i-to_h">#to_h</a>
+    <li ><a href="#method-i-parse">#parse</a>
     
   </ul>
 </div>
@@ -88,9 +90,9 @@
   </div>
 </nav>
 
-<main role="main" aria-labelledby="class-Bismas::Categories">
-  <h1 id="class-Bismas::Categories" class="class">
-    class Bismas::Categories
+<main role="main" aria-labelledby="class-Bismas::Schema">
+  <h1 id="class-Bismas::Schema" class="class">
+    class Bismas::Schema
   </h1>
 
   <section class="description">
@@ -127,6 +129,53 @@
     
 
     
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-category_length" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">category_length</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-name" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">name</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-title" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">title</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section>
+    
 
     
      <section id="public-class-5Buntitled-5D-method-details" class="method-section">
@@ -154,9 +203,42 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/bismas/categories.rb, line 53</span>
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 49</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
-  <span class="ruby-ivar">@categories</span> = {}
+  <span class="ruby-ivar">@title</span>, <span class="ruby-ivar">@name</span>, <span class="ruby-ivar">@category_length</span>, <span class="ruby-ivar">@categories</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-keyword">nil</span>, {}
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-parse" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse</span><span
+            class="method-args">(*args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse-source">
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">new</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -187,22 +269,10 @@
 
           
           <div class="method-source-code" id="parse_file-source">
-            <pre><span class="ruby-comment"># File lib/bismas/categories.rb, line 36</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">options</span> = {})
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-constant">Bismas</span>.<span class="ruby-identifier">amend_encoding</span>(<span class="ruby-identifier">options</span>)
-
-  <span class="ruby-identifier">categories</span>, <span class="ruby-identifier">category_re</span> = <span class="ruby-identifier">new</span>, <span class="ruby-keyword">nil</span>
-
-  <span class="ruby-constant">File</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">options</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
-    <span class="ruby-keyword">case</span> <span class="ruby-identifier">line</span>
-      <span class="ruby-keyword">when</span> <span class="ruby-constant">FIELD_RE</span>
-        <span class="ruby-identifier">category_re</span> = <span class="ruby-constant">CATEGORY_RE</span>[<span class="ruby-node">$1</span>.<span class="ruby-identifier">to_i</span>]
-      <span class="ruby-keyword">when</span> <span class="ruby-identifier">category_re</span>
-        <span class="ruby-identifier">categories</span>[<span class="ruby-node">$1</span>.<span class="ruby-identifier">strip</span>] = <span class="ruby-node">$2</span>.<span class="ruby-identifier">strip</span>
-    <span class="ruby-keyword">end</span>
-  }
-
-  <span class="ruby-identifier">categories</span>
+  <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>, <span class="ruby-string">&#39;rb&#39;</span>, <span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">method</span>(<span class="ruby-value">:parse</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -241,7 +311,7 @@
 
           
           <div class="method-source-code" id="5B-5D-source">
-            <pre><span class="ruby-comment"># File lib/bismas/categories.rb, line 61</span>
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 79</span>
 <span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)
   <span class="ruby-ivar">@categories</span>[<span class="ruby-identifier">key</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -274,7 +344,7 @@
 
           
           <div class="method-source-code" id="5B-5D-3D-source">
-            <pre><span class="ruby-comment"># File lib/bismas/categories.rb, line 65</span>
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
   <span class="ruby-ivar">@categories</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>
 <span class="ruby-keyword">end</span></pre>
@@ -307,7 +377,7 @@
 
           
           <div class="method-source-code" id="categories-source">
-            <pre><span class="ruby-comment"># File lib/bismas/categories.rb, line 57</span>
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">categories</span>
   <span class="ruby-ivar">@categories</span>.<span class="ruby-identifier">keys</span>
 <span class="ruby-keyword">end</span></pre>
@@ -321,11 +391,11 @@
       </div>
 
     
-      <div id="method-i-to_h" class="method-detail ">
+      <div id="method-i-parse" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">to_h</span><span
-            class="method-args">()</span>
+          <span class="method-name">parse</span><span
+            class="method-args">(io)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -339,10 +409,26 @@
           
 
           
-          <div class="method-source-code" id="to_h-source">
-            <pre><span class="ruby-comment"># File lib/bismas/categories.rb, line 69</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_h</span>
-  <span class="ruby-ivar">@categories</span>
+          <div class="method-source-code" id="parse-source">
+            <pre><span class="ruby-comment"># File lib/bismas/schema.rb, line 55</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">io</span>)
+  <span class="ruby-identifier">category_re</span> = <span class="ruby-keyword">nil</span>
+
+  <span class="ruby-identifier">io</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">line</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-identifier">category_re</span>
+        <span class="ruby-keyword">self</span>[<span class="ruby-node">$1</span>.<span class="ruby-identifier">strip</span>] = <span class="ruby-node">$2</span>.<span class="ruby-identifier">strip</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-constant">FIELD_RE</span>
+        <span class="ruby-identifier">category_re</span> = <span class="ruby-constant">CATEGORY_RE</span>[
+          <span class="ruby-keyword">self</span>.<span class="ruby-identifier">category_length</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">to_i</span>]
+      <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>
+        <span class="ruby-identifier">title</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span>
+          <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>  = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">strip</span> <span class="ruby-operator">:</span>
+          <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">strip</span>
+    <span class="ruby-keyword">end</span>
+  }
+
+  <span class="ruby-keyword">self</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
