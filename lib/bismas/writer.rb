@@ -85,9 +85,11 @@ module Bismas
     def write_i(id, record, io = io())
       return if record.empty?
 
-      category_format, fs = "%-#{@category_length}s", @chars[:fs]
+      if key && !record.key?(key)
+        record = { key => id || auto_id.call }.update(record)
+      end
 
-      record[key] = id || auto_id.call if key && !record.key?(key)
+      category_format, fs = "%-#{@category_length}s", @chars[:fs]
 
       io << @chars[:rs]
 

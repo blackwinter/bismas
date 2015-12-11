@@ -10,6 +10,7 @@
 * Renamed Bismas::Categories to Bismas::Schema and extended scope.
 * Fixed Bismas.amend_encoding to use default encoding when encoding option is
   +nil+.
+* Changed Bismas::Writer to insert key field at beginning of record.
 
 == 0.2.0 [2015-12-03]
 
