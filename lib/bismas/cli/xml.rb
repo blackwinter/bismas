@@ -3,7 +3,7 @@
 #                                                                             #
 # bismas -- A Ruby client for BISMAS databases                                #
 #                                                                             #
-# Copyright (C) 2015 Jens Wille                                               #
+# Copyright (C) 2015-2016 Jens Wille                                          #
 #                                                                             #
 # Authors:                                                                    #
 #     Jens Wille <jens.wille@gmail.com>                                       #
@@ -24,6 +24,8 @@
 ###############################################################################
 #++
 
+require 'time'
+
 module Bismas
 
   class CLI
@@ -40,6 +42,12 @@ module Bismas
 
         schema = Schema.parse_file(schema_file)
 
+        root_attributes = {
+          name:        schema.name,
+          description: schema.title,
+          mtime:       File.mtime(options[:input]).xmlschema
+        }
+
         reader_options = {
           encoding:        options[:encoding],
           key:             options[:key],
@@ -52,7 +60,7 @@ module Bismas
           xml = Builder::XmlMarkup.new(indent: 2, target: f)
           xml.instruct!
 
-          xml.records(name: schema.name, description: schema.title) {
+          xml.records(root_attributes) {
             Reader.parse_file(options[:input], reader_options) { |id, record|
               xml.record(id: id) {
                 record.sort_by { |key,| key }.each { |key, values|
