@@ -5,6 +5,8 @@
 == 0.4.0 [unreleased]
 
 * +bismas2xml+: Include input file's modification time.
+* +bismas-filter+: Accept code file in addition to string for +execute+ and
+  +execute-mapped+ options.
 
 == 0.3.0 [2015-12-11]
 

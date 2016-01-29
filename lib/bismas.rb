@@ -3,7 +3,7 @@
 #                                                                             #
 # bismas -- A Ruby client for BISMAS databases                                #
 #                                                                             #
-# Copyright (C) 2015 Jens Wille                                               #
+# Copyright (C) 2015-2016 Jens Wille                                          #
 #                                                                             #
 # Authors:                                                                    #
 #     Jens Wille <jens.wille@gmail.com>                                       #
@@ -67,10 +67,7 @@ module Bismas
     end
 
     def filter(klass, options, &block)
-      execute = %i[execute execute_mapped].map { |key|
-        value = Array(options[key]); lambda { |bind|
-        value.each { |code| eval(code, bind) } } }
-
+      execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
       mapping = mapping(options[:mapping], &block)
 
       key_format = options[:key_format]
@@ -100,6 +97,21 @@ module Bismas
           execute[1][bind]
           writer[key_format % id] = record
         }
+      }
+    end
+
+    def execute(execute, &block)
+      block ||= method(:abort)
+
+      execute.map { |value|
+        value = Array(value).map { |code| case code
+          when /\.rb\z/i then File.readable?(code) ?
+            File.read(code) : block["No such file: #{code}"]
+          when String    then code
+          else block["Invalid code: #{code.inspect}"]
+        end }
+
+        lambda { |bind| value.each { |code| eval(code, bind) } }
       }
     end
 

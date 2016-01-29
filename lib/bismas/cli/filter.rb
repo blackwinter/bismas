@@ -3,7 +3,7 @@
 #                                                                             #
 # bismas -- A Ruby client for BISMAS databases                                #
 #                                                                             #
-# Copyright (C) 2015 Jens Wille                                               #
+# Copyright (C) 2015-2016 Jens Wille                                          #
 #                                                                             #
 # Authors:                                                                    #
 #     Jens Wille <jens.wille@gmail.com>                                       #
@@ -59,6 +59,8 @@ module Bismas
       private
 
       def opts(opts)
+        opts.summary_width = 34
+
         opts.option(:input__FILE, 'Path to input file [Default: STDIN]')
 
         opts.option(:output__FILE, 'Path to output file [Default: STDOUT]')
@@ -106,12 +108,12 @@ module Bismas
 
         opts.separator
 
-        opts.option(:execute__CODE, 'Code to execute for each _record_ before mapping') { |e|
-          options[:execute] << e
+        opts.option(:execute__FILE_OR_CODE, 'Code to execute for each _record_ before mapping') { |e|
+          (options[:execute] ||= []) << e
         }
 
-        opts.option(:execute_mapped__CODE, :E, 'Code to execute for each _record_ after mapping') { |e|
-          options[:execute_mapped] << e
+        opts.option(:execute_mapped__FILE_OR_CODE, :E, 'Code to execute for each _record_ after mapping') { |e|
+          (options[:execute_mapped] ||= []) << e
         }
 
         opts.separator
