@@ -94,9 +94,9 @@ module Bismas
 
     Mapping[case mapping
       when nil, Hash    then mapping
-      when /\A\{.*\}\z/ then SafeYAML.load(mapping)
+      when /\A\{.*\}\z/ then safe_yaml.load(mapping)
       when String       then File.readable?(mapping) ?
-        SafeYAML.load_file(mapping) : block["No such file: #{mapping}"]
+        safe_yaml.load_file(mapping) : block["No such file: #{mapping}"]
       else block["Invalid mapping: #{mapping.inspect}"]
     end]
   end
@@ -128,6 +128,11 @@ module Bismas
   rescue LoadError => err
     block ||= method(:abort)
     block["Please install the `#{gem}' gem. (#{err})"]
+  end
+
+  def safe_yaml
+    require_gem 'safe_yaml', 'safe_yaml/load'
+    SafeYAML
   end
 
 end
