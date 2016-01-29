@@ -3,7 +3,7 @@
 #                                                                             #
 # bismas -- A Ruby client for BISMAS databases                                #
 #                                                                             #
-# Copyright (C) 2015 Jens Wille                                               #
+# Copyright (C) 2015-2016 Jens Wille                                          #
 #                                                                             #
 # Authors:                                                                    #
 #     Jens Wille <jens.wille@gmail.com>                                       #
@@ -24,9 +24,15 @@
 ###############################################################################
 #++
 
+require 'forwardable'
+
 module Bismas
 
   class Schema
+
+    include Enumerable
+
+    extend Forwardable
 
     FIELD_RE = %r{\Afeld\s+=\s+(\d+)}i
 
@@ -52,6 +58,10 @@ module Bismas
 
     attr_accessor :title, :name, :category_length
 
+    def_delegators :@categories, :[], :[]=, :each
+
+    def_delegator :@categories, :keys, :categories
+
     def parse(io)
       category_re = nil
 
@@ -70,18 +80,6 @@ module Bismas
       }
 
       self
-    end
-
-    def categories
-      @categories.keys
-    end
-
-    def [](key)
-      @categories[key]
-    end
-
-    def []=(key, value)
-      @categories[key] = value
     end
 
   end
