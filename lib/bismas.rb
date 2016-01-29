@@ -26,6 +26,8 @@
 
 module Bismas
 
+  extend self
+
   # Default file encoding
   DEFAULT_ENCODING = 'CP850'
 
@@ -47,119 +49,85 @@ module Bismas
   # See parameter +FUELLZEICHEN+ in BISMAS <tt>*.CFG</tt>
   DEFAULT_PADDING_LENGTH = 20
 
-  class << self
+  def chars(options = {})
+    encoding = amend_encoding(options).split(':').last
 
-    def chars(options = {})
-      encoding = amend_encoding(options).split(':').last
+    Hash[CHARS.map { |k, v| [k, begin
+      v.encode(encoding)
+    rescue Encoding::UndefinedConversionError
+      v.dup.force_encoding(encoding)
+    end] }]
+  end
 
-      Hash[CHARS.map { |k, v| [k, begin
-        v.encode(encoding)
-      rescue Encoding::UndefinedConversionError
-        v.dup.force_encoding(encoding)
-      end] }]
-    end
+  def regex(options = {}, chars = chars(options))
+    category_length = options[:category_length] || DEFAULT_CATEGORY_LENGTH
 
-    def regex(options = {}, chars = chars(options))
-      category_length = options[:category_length] || DEFAULT_CATEGORY_LENGTH
+    Hash[REGEX.map { |k, v| [k, Regexp.new(v % chars)] }].update(category:
+      /[^#{chars.values_at(*CATEGORY_CHAR_SKIP).join}]{#{category_length}}/)
+  end
 
-      Hash[REGEX.map { |k, v| [k, Regexp.new(v % chars)] }].update(category:
-        /[^#{chars.values_at(*CATEGORY_CHAR_SKIP).join}]{#{category_length}}/)
-    end
+  def filter(klass, options, &block)
+    Filter.run(klass, options, &block)
+  end
 
-    def filter(klass, options, &block)
-      execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
-      mapping = mapping(options[:mapping], &block)
+  def to_xml(options, &block)
+    XML.run(options, &block)
+  end
 
-      key_format = options[:key_format]
+  def execute(execute, &block)
+    block ||= method(:abort)
 
-      writer_options = {
-        encoding:        encoding = options[:output_encoding],
-        key:             options[:output_key],
-        sort:            options[:sort],
-        padding_length:  options[:padding_length],
-        category_length: options[:category_length]
-      }
+    execute.map { |value|
+      value = Array(value).map { |code| case code
+        when /\.rb\z/i then File.readable?(code) ?
+          File.read(code) : block["No such file: #{code}"]
+        when String    then code
+        else block["Invalid code: #{code.inspect}"]
+      end }
 
-      reader_options = {
-        encoding:        options[:input_encoding],
-        key:             options[:input_key],
-        strict:          options[:strict],
-        silent:          options[:silent],
-        legacy:          options[:legacy],
-        category_length: options[:category_length]
-      }
+      lambda { |bind| value.each { |code| eval(code, bind) } }
+    }
+  end
 
-      klass.open(options[:output], writer_options) { |writer|
-        Reader.parse_file(options[:input], reader_options) { |id, record|
-          execute[0][bind = binding]
-          record = mapping.apply(encode(record, encoding))
+  def mapping(mapping, &block)
+    block ||= method(:abort)
 
-          execute[1][bind]
-          writer[key_format % id] = record
-        }
-      }
-    end
+    Mapping[case mapping
+      when nil, Hash    then mapping
+      when /\A\{.*\}\z/ then SafeYAML.load(mapping)
+      when String       then File.readable?(mapping) ?
+        SafeYAML.load_file(mapping) : block["No such file: #{mapping}"]
+      else block["Invalid mapping: #{mapping.inspect}"]
+    end]
+  end
 
-    def to_xml(options, &block)
-      XML.run(options, &block)
-    end
+  def encode(record, encoding)
+    return record unless encoding
 
-    def execute(execute, &block)
-      block ||= method(:abort)
+    fallback = Hash.new { |h, k| h[k] = '?' }
 
-      execute.map { |value|
-        value = Array(value).map { |code| case code
-          when /\.rb\z/i then File.readable?(code) ?
-            File.read(code) : block["No such file: #{code}"]
-          when String    then code
-          else block["Invalid code: #{code.inspect}"]
-        end }
+    record.each { |key, values|
+      values.each { |value| value.encode!(encoding, fallback: fallback) }
 
-        lambda { |bind| value.each { |code| eval(code, bind) } }
-      }
-    end
+      unless fallback.empty?
+        chars = fallback.keys.map(&:inspect).join(', '); fallback.clear
+        warn "Undefined characters at #{$.}:#{key}: #{chars}"
+      end
+    }
+  end
 
-    def mapping(mapping, &block)
-      block ||= method(:abort)
+  def amend_encoding(options, default_encoding = DEFAULT_ENCODING)
+    encoding = (options[:encoding] || default_encoding).to_s
 
-      Mapping[case mapping
-        when nil, Hash    then mapping
-        when /\A\{.*\}\z/ then SafeYAML.load(mapping)
-        when String       then File.readable?(mapping) ?
-          SafeYAML.load_file(mapping) : block["No such file: #{mapping}"]
-        else block["Invalid mapping: #{mapping.inspect}"]
-      end]
-    end
+    options[:encoding] = encoding.start_with?(':') ?
+      default_encoding.to_s + encoding : encoding
+  end
 
-    def encode(record, encoding)
-      return record unless encoding
-
-      fallback = Hash.new { |h, k| h[k] = '?' }
-
-      record.each { |key, values|
-        values.each { |value| value.encode!(encoding, fallback: fallback) }
-
-        unless fallback.empty?
-          chars = fallback.keys.map(&:inspect).join(', '); fallback.clear
-          warn "Undefined characters at #{$.}:#{key}: #{chars}"
-        end
-      }
-    end
-
-    def amend_encoding(options, default_encoding = DEFAULT_ENCODING)
-      encoding = (options[:encoding] || default_encoding).to_s
-
-      options[:encoding] = encoding.start_with?(':') ?
-        default_encoding.to_s + encoding : encoding
-    end
-
-    def require_gem(gem, lib = gem, &block)
-      require lib
-    rescue LoadError => err
-      block ||= method(:abort)
-      block["Please install the `#{gem}' gem. (#{err})"]
-    end
-
+  def require_gem(gem, lib = gem, &block)
+    require lib
+  rescue LoadError => err
+    block ||= method(:abort)
+    block["Please install the `#{gem}' gem. (#{err})"]
   end
 
 end
@@ -169,5 +137,6 @@ require_relative 'bismas/base'
 require_relative 'bismas/schema'
 require_relative 'bismas/reader'
 require_relative 'bismas/writer'
+require_relative 'bismas/filter'
 require_relative 'bismas/mapping'
 require_relative 'bismas/version'
