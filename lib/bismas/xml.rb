@@ -24,29 +24,65 @@
 ###############################################################################
 #++
 
-require 'cyclops'
-require 'bismas'
+require 'time'
 
 module Bismas
 
-  class CLI < Cyclops
+  module XML
 
-    def self.defaults
-      super.merge(
-        config: "#{name.split('::').last.downcase}.yaml",
-        input:  '-',
-        output: '-'
-      )
-    end
+    extend self
 
-    def require_gem(*args)
-      Bismas.require_gem(*args, &method(:abort))
+    extend Bismas
+
+    def run(options, &block)
+      block ||= method(:abort)
+
+      require_gem 'builder'
+
+      block['Schema file is required'] unless schema_file = options[:schema]
+      block["No such file: #{schema_file}"] unless File.readable?(schema_file)
+
+      schema = Schema.parse_file(schema_file)
+
+      execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
+      mapping = mapping(options[:mapping], &block)
+
+      root_attributes = {
+        name:        schema.name,
+        description: schema.title,
+        mtime:       File.mtime(options[:input]).xmlschema
+      }
+
+      reader_options = {
+        encoding:        options[:encoding],
+        key:             options[:key],
+        strict:          options[:strict],
+        silent:          options[:silent],
+        category_length: schema.category_length
+      }
+
+      File.open_file(options[:output], {}, 'wb') { |f|
+        xml = Builder::XmlMarkup.new(indent: 2, target: f)
+        xml.instruct!
+
+        xml.records(root_attributes) {
+          Reader.parse_file(options[:input], reader_options) { |id, record|
+            xml.record(id: id) {
+              execute[0][bind = binding]
+              record = mapping.apply(record)
+
+              execute[1][bind]
+              record.sort_by { |key,| key }.each { |key, values|
+                Array(values).each { |value|
+                  xml.field(value, name: key, description: schema[key])
+                }
+              }
+            }
+          }
+        }
+      }
     end
 
   end
 
 end
-
-require_relative 'cli/chardiff'
-require_relative 'cli/filter'
-require_relative 'cli/xml'

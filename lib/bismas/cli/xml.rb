@@ -24,8 +24,6 @@
 ###############################################################################
 #++
 
-require 'time'
-
 module Bismas
 
   class CLI
@@ -33,50 +31,16 @@ module Bismas
     class XML < self
 
       def run(arguments)
-        require_gem 'builder'
-
         quit unless arguments.empty?
 
-        quit 'Schema file is required' unless schema_file = options[:schema]
-        quit "No such file: #{schema_file}" unless File.readable?(schema_file)
-
-        schema = Schema.parse_file(schema_file)
-
-        root_attributes = {
-          name:        schema.name,
-          description: schema.title,
-          mtime:       File.mtime(options[:input]).xmlschema
-        }
-
-        reader_options = {
-          encoding:        options[:encoding],
-          key:             options[:key],
-          strict:          options[:strict],
-          silent:          options[:silent],
-          category_length: schema.category_length
-        }
-
-        File.open_file(options[:output], {}, 'wb') { |f|
-          xml = Builder::XmlMarkup.new(indent: 2, target: f)
-          xml.instruct!
-
-          xml.records(root_attributes) {
-            Reader.parse_file(options[:input], reader_options) { |id, record|
-              xml.record(id: id) {
-                record.sort_by { |key,| key }.each { |key, values|
-                  values.each { |value|
-                    xml.field(value, name: key, description: schema[key])
-                  }
-                }
-              }
-            }
-          }
-        }
+        Bismas.to_xml(options, &method(:quit))
       end
 
       private
 
       def opts(opts)
+        opts.summary_width = 34
+
         opts.option(:input__FILE, 'Path to input file [Default: STDIN]')
 
         opts.option(:output__FILE, 'Path to output file [Default: STDOUT]')
@@ -90,6 +54,20 @@ module Bismas
         opts.separator
 
         opts.option(:key__KEY, :K, 'ID key of input file')
+
+        opts.separator
+
+        opts.option(:mapping__FILE_OR_YAML, 'Path to mapping file or YAML string')
+
+        opts.separator
+
+        opts.option(:execute__FILE_OR_CODE, 'Code to execute for each _record_ before mapping') { |e|
+          (options[:execute] ||= []) << e
+        }
+
+        opts.option(:execute_mapped__FILE_OR_CODE, :E, 'Code to execute for each _record_ after mapping') { |e|
+          (options[:execute_mapped] ||= []) << e
+        }
 
         opts.separator
 

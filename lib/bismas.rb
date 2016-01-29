@@ -100,6 +100,10 @@ module Bismas
       }
     end
 
+    def to_xml(options, &block)
+      XML.run(options, &block)
+    end
+
     def execute(execute, &block)
       block ||= method(:abort)
 
@@ -149,10 +153,18 @@ module Bismas
         default_encoding.to_s + encoding : encoding
     end
 
+    def require_gem(gem, lib = gem, &block)
+      require lib
+    rescue LoadError => err
+      block ||= method(:abort)
+      block["Please install the `#{gem}' gem. (#{err})"]
+    end
+
   end
 
 end
 
+require_relative 'bismas/xml'
 require_relative 'bismas/base'
 require_relative 'bismas/schema'
 require_relative 'bismas/reader'
