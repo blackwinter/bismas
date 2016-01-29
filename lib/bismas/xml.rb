@@ -47,7 +47,7 @@ module Bismas
       execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
       mapping = mapping(options[:mapping], &block)
 
-      root_attributes = {
+      records_attributes = {
         name:        schema.name,
         description: schema.title,
         mtime:       File.mtime(options[:input]).xmlschema
@@ -61,11 +61,13 @@ module Bismas
         category_length: schema.category_length
       }
 
+      schema = mapping.apply(schema)
+
       File.open_file(options[:output], {}, 'wb') { |f|
         xml = Builder::XmlMarkup.new(indent: 2, target: f)
         xml.instruct!
 
-        xml.records(root_attributes) {
+        xml.records(records_attributes) {
           Reader.parse_file(options[:input], reader_options) { |id, record|
             xml.record(id: id) {
               execute[0][bind = binding]
@@ -73,9 +75,12 @@ module Bismas
 
               execute[1][bind]
               record.sort_by { |key,| key }.each { |key, values|
-                Array(values).each { |value|
-                  xml.field(value, name: key, description: schema[key])
+                field_attributes = {
+                  name:        key,
+                  description: Array(schema[key]).join('/')
                 }
+
+                Array(values).each { |value| xml.field(value, field_attributes) }
               }
             }
           }

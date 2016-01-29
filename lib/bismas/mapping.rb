@@ -3,7 +3,7 @@
 #                                                                             #
 # bismas -- A Ruby client for BISMAS databases                                #
 #                                                                             #
-# Copyright (C) 2015 Jens Wille                                               #
+# Copyright (C) 2015-2016 Jens Wille                                          #
 #                                                                             #
 # Authors:                                                                    #
 #     Jens Wille <jens.wille@gmail.com>                                       #
@@ -53,7 +53,7 @@ module Bismas
 
     def apply(hash, new_hash = default_hash)
       hash.each { |key, value| map(key) { |new_key|
-        new_hash[new_key].concat(value)
+        new_hash[new_key].concat(Array(value))
       } }
 
       new_hash
