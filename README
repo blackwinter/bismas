@@ -2,7 +2,7 @@
 
 == VERSION
 
-This documentation refers to bismas version 0.3.0.
+This documentation refers to bismas version 0.4.0.
 
 
 == DESCRIPTION
@@ -25,7 +25,7 @@ Travis CI::     https://travis-ci.org/blackwinter/bismas
 
 == LICENSE AND COPYRIGHT
 
-Copyright (C) 2015 Jens Wille
+Copyright (C) 2015-2016 Jens Wille
 
 bismas is free software: you can redistribute it and/or modify it
 under the terms of the GNU Affero General Public License as published by

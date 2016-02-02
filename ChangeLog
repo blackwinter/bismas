@@ -2,7 +2,7 @@
 
 = Revision history for bismas
 
-== 0.4.0 [unreleased]
+== 0.4.0 [2016-02-02]
 
 * +bismas2xml+: Include input file's modification time.
 * +bismas2xml+: Learned options +mapping+, +execute+ and +execute-mapped+.
