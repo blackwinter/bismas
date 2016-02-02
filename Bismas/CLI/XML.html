@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Bismas::CLI::XML - bismas Application documentation (v0.3.0)</title>
+<title>class Bismas::CLI::XML - bismas Application documentation (v0.4.0)</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "../../";
@@ -129,39 +129,9 @@
           <div class="method-source-code" id="run-source">
             <pre><span class="ruby-comment"># File lib/bismas/cli/xml.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">arguments</span>)
-  <span class="ruby-identifier">require_gem</span> <span class="ruby-string">&#39;builder&#39;</span>
-
   <span class="ruby-identifier">quit</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">arguments</span>.<span class="ruby-identifier">empty?</span>
 
-  <span class="ruby-identifier">quit</span> <span class="ruby-string">&#39;Schema file is required&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">schema_file</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:schema</span>]
-  <span class="ruby-identifier">quit</span> <span class="ruby-node">&quot;No such file: #{schema_file}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">schema_file</span>)
-
-  <span class="ruby-identifier">schema</span> = <span class="ruby-constant">Schema</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">schema_file</span>)
-
-  <span class="ruby-identifier">reader_options</span> = {
-    <span class="ruby-identifier">encoding</span><span class="ruby-operator">:</span>        <span class="ruby-identifier">options</span>[<span class="ruby-value">:encoding</span>],
-    <span class="ruby-identifier">key</span><span class="ruby-operator">:</span>             <span class="ruby-identifier">options</span>[<span class="ruby-value">:key</span>],
-    <span class="ruby-identifier">strict</span><span class="ruby-operator">:</span>          <span class="ruby-identifier">options</span>[<span class="ruby-value">:strict</span>],
-    <span class="ruby-identifier">silent</span><span class="ruby-operator">:</span>          <span class="ruby-identifier">options</span>[<span class="ruby-value">:silent</span>],
-    <span class="ruby-identifier">category_length</span><span class="ruby-operator">:</span> <span class="ruby-identifier">schema</span>.<span class="ruby-identifier">category_length</span>
-  }
-
-  <span class="ruby-constant">File</span>.<span class="ruby-identifier">open_file</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:output</span>], {}, <span class="ruby-string">&#39;wb&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">xml</span> = <span class="ruby-constant">Builder</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlMarkup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">indent</span><span class="ruby-operator">:</span> <span class="ruby-value">2</span>, <span class="ruby-identifier">target</span><span class="ruby-operator">:</span> <span class="ruby-identifier">f</span>)
-    <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">instruct!</span>
-
-    <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">records</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">schema</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">description</span><span class="ruby-operator">:</span> <span class="ruby-identifier">schema</span>.<span class="ruby-identifier">title</span>) {
-      <span class="ruby-constant">Reader</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:input</span>], <span class="ruby-identifier">reader_options</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">record</span><span class="ruby-operator">|</span>
-        <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">record</span>(<span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">id</span>) {
-          <span class="ruby-identifier">record</span>.<span class="ruby-identifier">sort_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-operator">|</span> <span class="ruby-identifier">key</span> }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">values</span><span class="ruby-operator">|</span>
-            <span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
-              <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">description</span><span class="ruby-operator">:</span> <span class="ruby-identifier">schema</span>[<span class="ruby-identifier">key</span>])
-            }
-          }
-        }
-      }
-    }
-  }
+  <span class="ruby-constant">Bismas</span>.<span class="ruby-identifier">to_xml</span>(<span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">method</span>(<span class="ruby-value">:quit</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -200,8 +170,10 @@
 
           
           <div class="method-source-code" id="opts-source">
-            <pre><span class="ruby-comment"># File lib/bismas/cli/xml.rb, line 71</span>
+            <pre><span class="ruby-comment"># File lib/bismas/cli/xml.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">opts</span>(<span class="ruby-identifier">opts</span>)
+  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">summary_width</span> = <span class="ruby-value">34</span>
+
   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:input__FILE</span>, <span class="ruby-string">&#39;Path to input file [Default: STDIN]&#39;</span>)
 
   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:output__FILE</span>, <span class="ruby-string">&#39;Path to output file [Default: STDOUT]&#39;</span>)
@@ -215,6 +187,20 @@
   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
 
   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:key__KEY</span>, <span class="ruby-value">:K</span>, <span class="ruby-string">&#39;ID key of input file&#39;</span>)
+
+  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
+
+  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:mapping__FILE_OR_YAML</span>, <span class="ruby-string">&#39;Path to mapping file or YAML string&#39;</span>)
+
+  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
+
+  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:execute__FILE_OR_CODE</span>, <span class="ruby-string">&#39;Code to execute for each _record_ before mapping&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+    (<span class="ruby-identifier">options</span>[<span class="ruby-value">:execute</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">e</span>
+  }
+
+  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">option</span>(<span class="ruby-value">:execute_mapped__FILE_OR_CODE</span>, <span class="ruby-value">:E</span>, <span class="ruby-string">&#39;Code to execute for each _record_ after mapping&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+    (<span class="ruby-identifier">options</span>[<span class="ruby-value">:execute_mapped</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">e</span>
+  }
 
   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span>
 
@@ -240,7 +226,7 @@
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 

@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>module Bismas - bismas Application documentation (v0.3.0)</title>
+<title>module Bismas - bismas Application documentation (v0.4.0)</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "./";
@@ -63,17 +63,25 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-c-amend_encoding">::amend_encoding</a>
+    <li ><a href="#method-i-amend_encoding">#amend_encoding</a>
     
-    <li ><a href="#method-c-chars">::chars</a>
+    <li ><a href="#method-i-chars">#chars</a>
     
-    <li ><a href="#method-c-encode">::encode</a>
+    <li ><a href="#method-i-encode">#encode</a>
     
-    <li ><a href="#method-c-filter">::filter</a>
+    <li ><a href="#method-i-execute">#execute</a>
     
-    <li ><a href="#method-c-mapping">::mapping</a>
+    <li ><a href="#method-i-filter">#filter</a>
     
-    <li ><a href="#method-c-regex">::regex</a>
+    <li ><a href="#method-i-mapping">#mapping</a>
+    
+    <li ><a href="#method-i-regex">#regex</a>
+    
+    <li ><a href="#method-i-require_gem">#require_gem</a>
+    
+    <li ><a href="#method-i-safe_yaml">#safe_yaml</a>
+    
+    <li ><a href="#method-i-to_xml">#to_xml</a>
     
   </ul>
 </div>
@@ -147,13 +155,13 @@
     
 
     
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
        <header>
-         <h3>Public Class Methods</h3>
+         <h3>Public Instance Methods</h3>
        </header>
 
     
-      <div id="method-c-amend_encoding" class="method-detail ">
+      <div id="method-i-amend_encoding" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">amend_encoding</span><span
@@ -172,7 +180,7 @@
 
           
           <div class="method-source-code" id="amend_encoding-source">
-            <pre><span class="ruby-comment"># File lib/bismas.rb, line 133</span>
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 119</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">amend_encoding</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">default_encoding</span> = <span class="ruby-constant">DEFAULT_ENCODING</span>)
   <span class="ruby-identifier">encoding</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-value">:encoding</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">default_encoding</span>).<span class="ruby-identifier">to_s</span>
 
@@ -189,7 +197,7 @@
       </div>
 
     
-      <div id="method-c-chars" class="method-detail ">
+      <div id="method-i-chars" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">chars</span><span
@@ -228,7 +236,7 @@
       </div>
 
     
-      <div id="method-c-encode" class="method-detail ">
+      <div id="method-i-encode" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">encode</span><span
@@ -247,7 +255,7 @@
 
           
           <div class="method-source-code" id="encode-source">
-            <pre><span class="ruby-comment"># File lib/bismas.rb, line 118</span>
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">encode</span>(<span class="ruby-identifier">record</span>, <span class="ruby-identifier">encoding</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">record</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">encoding</span>
 
@@ -272,7 +280,51 @@
       </div>
 
     
-      <div id="method-c-filter" class="method-detail ">
+      <div id="method-i-execute" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">execute</span><span
+            class="method-args">(execute, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="execute-source">
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 77</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">execute</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">block</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">method</span>(<span class="ruby-value">:abort</span>)
+
+  <span class="ruby-identifier">execute</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">value</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">value</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">code</span><span class="ruby-operator">|</span> <span class="ruby-keyword">case</span> <span class="ruby-identifier">code</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-regexp">/\.rb\z/i</span> <span class="ruby-keyword">then</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">code</span>) <span class="ruby-operator">?</span>
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">code</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">block</span>[<span class="ruby-node">&quot;No such file: #{code}&quot;</span>]
+      <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>    <span class="ruby-keyword">then</span> <span class="ruby-identifier">code</span>
+      <span class="ruby-keyword">else</span> <span class="ruby-identifier">block</span>[<span class="ruby-node">&quot;Invalid code: #{code.inspect}&quot;</span>]
+    <span class="ruby-keyword">end</span> }
+
+    <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">bind</span><span class="ruby-operator">|</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">code</span><span class="ruby-operator">|</span> <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">code</span>, <span class="ruby-identifier">bind</span>) } }
+  }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-filter" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">filter</span><span
@@ -293,40 +345,7 @@
           <div class="method-source-code" id="filter-source">
             <pre><span class="ruby-comment"># File lib/bismas.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">filter</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-  <span class="ruby-identifier">execute</span> = <span class="ruby-operator">%</span>[<span class="ruby-identifier">execute</span> <span class="ruby-identifier">execute_mapped</span>].<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">value</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">key</span>]); <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">bind</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">code</span><span class="ruby-operator">|</span> <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">code</span>, <span class="ruby-identifier">bind</span>) } } }
-
-  <span class="ruby-identifier">mapping</span> = <span class="ruby-identifier">mapping</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:mapping</span>], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-
-  <span class="ruby-identifier">key_format</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:key_format</span>]
-
-  <span class="ruby-identifier">writer_options</span> = {
-    <span class="ruby-identifier">encoding</span><span class="ruby-operator">:</span>        <span class="ruby-identifier">encoding</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:output_encoding</span>],
-    <span class="ruby-identifier">key</span><span class="ruby-operator">:</span>             <span class="ruby-identifier">options</span>[<span class="ruby-value">:output_key</span>],
-    <span class="ruby-identifier">sort</span><span class="ruby-operator">:</span>            <span class="ruby-identifier">options</span>[<span class="ruby-value">:sort</span>],
-    <span class="ruby-identifier">padding_length</span><span class="ruby-operator">:</span>  <span class="ruby-identifier">options</span>[<span class="ruby-value">:padding_length</span>],
-    <span class="ruby-identifier">category_length</span><span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:category_length</span>]
-  }
-
-  <span class="ruby-identifier">reader_options</span> = {
-    <span class="ruby-identifier">encoding</span><span class="ruby-operator">:</span>        <span class="ruby-identifier">options</span>[<span class="ruby-value">:input_encoding</span>],
-    <span class="ruby-identifier">key</span><span class="ruby-operator">:</span>             <span class="ruby-identifier">options</span>[<span class="ruby-value">:input_key</span>],
-    <span class="ruby-identifier">strict</span><span class="ruby-operator">:</span>          <span class="ruby-identifier">options</span>[<span class="ruby-value">:strict</span>],
-    <span class="ruby-identifier">silent</span><span class="ruby-operator">:</span>          <span class="ruby-identifier">options</span>[<span class="ruby-value">:silent</span>],
-    <span class="ruby-identifier">legacy</span><span class="ruby-operator">:</span>          <span class="ruby-identifier">options</span>[<span class="ruby-value">:legacy</span>],
-    <span class="ruby-identifier">category_length</span><span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:category_length</span>]
-  }
-
-  <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:output</span>], <span class="ruby-identifier">writer_options</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">writer</span><span class="ruby-operator">|</span>
-    <span class="ruby-constant">Reader</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:input</span>], <span class="ruby-identifier">reader_options</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">record</span><span class="ruby-operator">|</span>
-      <span class="ruby-identifier">execute</span>[<span class="ruby-value">0</span>][<span class="ruby-identifier">bind</span> = <span class="ruby-identifier">binding</span>]
-      <span class="ruby-identifier">record</span> = <span class="ruby-identifier">mapping</span>.<span class="ruby-identifier">apply</span>(<span class="ruby-identifier">encode</span>(<span class="ruby-identifier">record</span>, <span class="ruby-identifier">encoding</span>))
-
-      <span class="ruby-identifier">execute</span>[<span class="ruby-value">1</span>][<span class="ruby-identifier">bind</span>]
-      <span class="ruby-identifier">writer</span>[<span class="ruby-identifier">key_format</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">id</span>] = <span class="ruby-identifier">record</span>
-    }
-  }
+  <span class="ruby-constant">Filter</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -338,7 +357,7 @@
       </div>
 
     
-      <div id="method-c-mapping" class="method-detail ">
+      <div id="method-i-mapping" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">mapping</span><span
@@ -357,15 +376,15 @@
 
           
           <div class="method-source-code" id="mapping-source">
-            <pre><span class="ruby-comment"># File lib/bismas.rb, line 106</span>
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 92</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mapping</span>(<span class="ruby-identifier">mapping</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-identifier">block</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">method</span>(<span class="ruby-value">:abort</span>)
 
   <span class="ruby-constant">Mapping</span>[<span class="ruby-keyword">case</span> <span class="ruby-identifier">mapping</span>
     <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>, <span class="ruby-constant">Hash</span>    <span class="ruby-keyword">then</span> <span class="ruby-identifier">mapping</span>
-    <span class="ruby-keyword">when</span> <span class="ruby-regexp">/\A\{.*\}\z/</span> <span class="ruby-keyword">then</span> <span class="ruby-constant">SafeYAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">mapping</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-regexp">/\A\{.*\}\z/</span> <span class="ruby-keyword">then</span> <span class="ruby-identifier">safe_yaml</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">mapping</span>)
     <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>       <span class="ruby-keyword">then</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">mapping</span>) <span class="ruby-operator">?</span>
-      <span class="ruby-constant">SafeYAML</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">mapping</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">block</span>[<span class="ruby-node">&quot;No such file: #{mapping}&quot;</span>]
+      <span class="ruby-identifier">safe_yaml</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">mapping</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">block</span>[<span class="ruby-node">&quot;No such file: #{mapping}&quot;</span>]
     <span class="ruby-keyword">else</span> <span class="ruby-identifier">block</span>[<span class="ruby-node">&quot;Invalid mapping: #{mapping.inspect}&quot;</span>]
   <span class="ruby-keyword">end</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -379,7 +398,7 @@
       </div>
 
     
-      <div id="method-c-regex" class="method-detail ">
+      <div id="method-i-regex" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">regex</span><span
@@ -415,6 +434,109 @@
       </div>
 
     
+      <div id="method-i-require_gem" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">require_gem</span><span
+            class="method-args">(gem, lib = gem, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="require_gem-source">
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">require_gem</span>(<span class="ruby-identifier">gem</span>, <span class="ruby-identifier">lib</span> = <span class="ruby-identifier">gem</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">require</span> <span class="ruby-identifier">lib</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">LoadError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">err</span>
+  <span class="ruby-identifier">block</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">method</span>(<span class="ruby-value">:abort</span>)
+  <span class="ruby-identifier">block</span>[<span class="ruby-node">&quot;Please install the `#{gem}&#39; gem. (#{err})&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-safe_yaml" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">safe_yaml</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="safe_yaml-source">
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">safe_yaml</span>
+  <span class="ruby-identifier">require_gem</span> <span class="ruby-string">&#39;safe_yaml&#39;</span>, <span class="ruby-string">&#39;safe_yaml/load&#39;</span>
+  <span class="ruby-constant">SafeYAML</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-to_xml" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">to_xml</span><span
+            class="method-args">(options, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="to_xml-source">
+            <pre><span class="ruby-comment"># File lib/bismas.rb, line 73</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_xml</span>(<span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-constant">XML</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
     </section>
   
   </section>
@@ -423,7 +545,7 @@
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
