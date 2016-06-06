@@ -82,10 +82,9 @@ module Bismas
 
               execute[2][bind2]
               record.sort_by { |key,| key }.each { |key, values|
-                field_attributes = {
-                  name:        key,
-                  description: Array(schema[key]).join('/')
-                }
+                field_attributes = { name: key }
+                desc = Array(schema[key]).join('/')
+                field_attributes[:description] = desc unless desc.empty?
 
                 Array(values).each { |value| xml.field(value, field_attributes) }
               }
