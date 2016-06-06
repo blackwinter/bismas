@@ -50,7 +50,7 @@ module Bismas
             options[:output_encoding] ||= Midos::DEFAULT_ENCODING
             Midos::Writer
           else
-            quit "Unsupported type: #{type}. Must be one of: #{TYPES.join(', ')}."
+            unsupported_type(type)
         end
 
         Bismas.filter(klass, options, &method(:quit))
@@ -87,7 +87,7 @@ module Bismas
         opts.separator
         opts.separator 'Output options:'
 
-        opts.option(:type__TYPE, "Output file type (#{TYPES.join(', ')}) [Default: #{TYPES.first}]")
+        type_option(opts)
 
         opts.separator
 

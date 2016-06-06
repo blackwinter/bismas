@@ -43,6 +43,14 @@ module Bismas
       Bismas.require_gem(*args, &method(:abort))
     end
 
+    def unsupported_type(type, types = self.class::TYPES)
+      quit "Unsupported type: #{type}. Must be one of: #{types.join(', ')}."
+    end
+
+    def type_option(opts, types = self.class::TYPES)
+      opts.option(:type__TYPE, "Output file type (#{types.join(', ')}) [Default: #{types.first}]")
+    end
+
   end
 
 end
