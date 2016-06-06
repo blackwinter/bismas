@@ -108,13 +108,7 @@ module Bismas
 
         opts.separator
 
-        opts.option(:execute__FILE_OR_CODE, 'Code to execute for each _record_ before mapping') { |e|
-          (options[:execute] ||= []) << e
-        }
-
-        opts.option(:execute_mapped__FILE_OR_CODE, :E, 'Code to execute for each _record_ after mapping') { |e|
-          (options[:execute_mapped] ||= []) << e
-        }
+        execute_options(opts)
 
         opts.separator
 

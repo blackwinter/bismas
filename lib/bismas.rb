@@ -74,6 +74,11 @@ module Bismas
     XML.run(options, &block)
   end
 
+  def execute_options(options, keys = nil, &block)
+    execute(options.values_at(*keys ||
+      %i[execute execute_mapped]), &block)
+  end
+
   def execute(execute, &block)
     block ||= method(:abort)
 

@@ -44,7 +44,7 @@ module Bismas
 
       schema = Schema.parse_file(schema_file)
 
-      execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
+      execute = execute_options(options, &block)
       mapping = mapping(options[:mapping], &block)
 
       records_element, record_element = case options[:type].to_s

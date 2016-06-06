@@ -33,7 +33,7 @@ module Bismas
     extend Bismas
 
     def run(klass, options, &block)
-      execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
+      execute = execute_options(options, &block)
       mapping = mapping(options[:mapping], &block)
 
       key_format = options[:key_format]
