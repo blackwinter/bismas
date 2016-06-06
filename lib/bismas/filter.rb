@@ -55,15 +55,19 @@ module Bismas
         category_length: options[:category_length]
       }
 
+      execute[0][bind1 = binding]
+
       klass.open(options[:output], writer_options) { |writer|
         Reader.parse_file(options[:input], reader_options) { |id, record|
-          execute[0][bind = binding]
+          execute[1][bind2 = binding]
           record = mapping.apply(encode(record, encoding))
 
-          execute[1][bind]
+          execute[2][bind2]
           writer[key_format % id] = record
         }
       }
+
+      execute[3][bind1]
     end
 
   end

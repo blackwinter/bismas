@@ -68,6 +68,8 @@ module Bismas
 
       schema = mapping.apply(schema)
 
+      execute[0][bind1 = binding]
+
       File.open_file(options[:output], {}, 'wb') { |f|
         xml = Builder::XmlMarkup.new(indent: 2, target: f)
         xml.instruct!
@@ -75,10 +77,10 @@ module Bismas
         xml.method_missing(records_element, records_attributes) {
           Reader.parse_file(options[:input], reader_options) { |id, record|
             xml.method_missing(record_element, id: id) {
-              execute[0][bind = binding]
+              execute[1][bind2 = binding]
               record = mapping.apply(record)
 
-              execute[1][bind]
+              execute[2][bind2]
               record.sort_by { |key,| key }.each { |key, values|
                 field_attributes = {
                   name:        key,
@@ -91,6 +93,8 @@ module Bismas
           }
         }
       }
+
+      execute[3][bind1]
     end
 
   end

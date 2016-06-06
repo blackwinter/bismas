@@ -76,11 +76,13 @@ module Bismas
 
   def execute_options(options, keys = nil, &block)
     execute(options.values_at(*keys ||
-      %i[execute execute_mapped]), &block)
+      %i[execute_before execute execute_mapped execute_after]), &block)
   end
 
   def execute(execute, &block)
     block ||= method(:abort)
+
+    outer_binding = nil
 
     execute.map { |value|
       value = Array(value).map { |code| case code
@@ -90,7 +92,13 @@ module Bismas
         else block["Invalid code: #{code.inspect}"]
       end }
 
-      lambda { |bind| value.each { |code| eval(code, bind) } }
+      lambda { |bind|
+        !outer_binding ? outer_binding = bind :
+          (outer_binding.local_variables - bind.local_variables).each { |v|
+            bind.local_variable_set(v, outer_binding.local_variable_get(v)) }
+
+        value.each { |code| eval(code, bind) }
+      }
     }
   end
 

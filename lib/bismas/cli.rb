@@ -59,6 +59,16 @@ module Bismas
       opts.option(:execute_mapped__FILE_OR_CODE, :E, 'Code to execute for each _record_ after mapping') { |e|
         (options[:execute_mapped] ||= []) << e
       }
+
+      opts.separator
+
+      opts.option(:execute_before__FILE_OR_CODE, :B, 'Code to execute before processing records') { |e|
+        (options[:execute_before] ||= []) << e
+      }
+
+      opts.option(:execute_after__FILE_OR_CODE, :A, 'Code to execute after processing records') { |e|
+        (options[:execute_after] ||= []) << e
+      }
     end
 
   end
