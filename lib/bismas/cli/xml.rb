@@ -57,17 +57,16 @@ module Bismas
 
         opts.option(:schema__FILE, 'Path to schema file [Required]')
 
+        input_options(opts)
+
         opts.separator
+        opts.separator 'Output options:'
 
         type_option(opts)
 
         opts.separator
 
-        opts.option(:encoding__ENCODING, :N, "Input encoding [Default: #{DEFAULT_ENCODING}]")
-
-        opts.separator
-
-        opts.option(:key__KEY, :K, 'ID key of input file')
+        opts.option(:output_encoding__ENCODING, :n, 'Output encoding')
 
         opts.separator
 
@@ -76,12 +75,6 @@ module Bismas
         opts.separator
 
         execute_options(opts)
-
-        opts.separator
-
-        opts.switch(:strict, :S, 'Turn parse warnings into errors')
-
-        opts.switch(:silent, :T, 'Silence parse warnings')
       end
 
     end

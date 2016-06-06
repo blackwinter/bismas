@@ -58,13 +58,7 @@ module Bismas
         mtime:       File.mtime(options[:input]).xmlschema
       }
 
-      reader_options = {
-        encoding:        options[:encoding],
-        key:             options[:key],
-        strict:          options[:strict],
-        silent:          options[:silent],
-        category_length: schema.category_length
-      }
+      reader_options = input_options(options, schema.category_length)
 
       schema = mapping.apply(schema)
 

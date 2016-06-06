@@ -65,24 +65,7 @@ module Bismas
 
         opts.option(:output__FILE, 'Path to output file [Default: STDOUT]')
 
-        opts.separator
-        opts.separator 'Input options:'
-
-        opts.option(:input_encoding__ENCODING, :N, "Input encoding [Default: #{DEFAULT_ENCODING}]")
-
-        opts.separator
-
-        opts.option(:input_key__KEY, :K, 'ID key of input file')
-
-        opts.separator
-
-        opts.switch(:strict, :S, 'Turn parse warnings into errors')
-
-        opts.switch(:silent, :T, 'Silence parse warnings')
-
-        opts.separator
-
-        opts.switch(:legacy, :L, 'Use the legacy parser')
+        input_options(opts)
 
         opts.separator
         opts.separator 'Output options:'

@@ -74,6 +74,17 @@ module Bismas
     XML.run(options, &block)
   end
 
+  def input_options(options, category_length = options[:category_length])
+    {
+      encoding:        options[:input_encoding],
+      key:             options[:input_key],
+      strict:          options[:strict],
+      silent:          options[:silent],
+      legacy:          options[:legacy],
+      category_length: category_length
+    }
+  end
+
   def execute_options(options, keys = nil, &block)
     execute(options.values_at(*keys ||
       %i[execute_before execute execute_mapped execute_after]), &block)

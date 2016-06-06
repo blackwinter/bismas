@@ -38,20 +38,11 @@ module Bismas
 
       key_format = options[:key_format]
 
-      writer_options = {
+      reader_options, writer_options = input_options(options), {
         encoding:        encoding = options[:output_encoding],
         key:             options[:output_key],
         sort:            options[:sort],
         padding_length:  options[:padding_length],
-        category_length: options[:category_length]
-      }
-
-      reader_options = {
-        encoding:        options[:input_encoding],
-        key:             options[:input_key],
-        strict:          options[:strict],
-        silent:          options[:silent],
-        legacy:          options[:legacy],
         category_length: options[:category_length]
       }
 

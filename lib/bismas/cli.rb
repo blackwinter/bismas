@@ -47,6 +47,27 @@ module Bismas
       quit "Unsupported type: #{type}. Must be one of: #{types.join(', ')}."
     end
 
+    def input_options(opts)
+      opts.separator
+      opts.separator 'Input options:'
+
+      opts.option(:input_encoding__ENCODING, :N, "Input encoding [Default: #{DEFAULT_ENCODING}]")
+
+      opts.separator
+
+      opts.option(:input_key__KEY, :K, 'ID key of input file')
+
+      opts.separator
+
+      opts.switch(:strict, :S, 'Turn parse warnings into errors')
+
+      opts.switch(:silent, :T, 'Silence parse warnings')
+
+      opts.separator
+
+      opts.switch(:legacy, :L, 'Use the legacy parser')
+    end
+
     def type_option(opts, types = self.class::TYPES)
       opts.option(:type__TYPE, "Output file type (#{types.join(', ')}) [Default: #{types.first}]")
     end
