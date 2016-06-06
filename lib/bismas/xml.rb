@@ -47,6 +47,11 @@ module Bismas
       execute = execute(options.values_at(*%i[execute execute_mapped]), &block)
       mapping = mapping(options[:mapping], &block)
 
+      records_element, record_element = case options[:type].to_s
+        when 'solr' then %w[add doc]
+        else             %w[records record]
+      end
+
       records_attributes = {
         name:        schema.name,
         description: schema.title,
@@ -67,9 +72,9 @@ module Bismas
         xml = Builder::XmlMarkup.new(indent: 2, target: f)
         xml.instruct!
 
-        xml.records(records_attributes) {
+        xml.method_missing(records_element, records_attributes) {
           Reader.parse_file(options[:input], reader_options) { |id, record|
-            xml.record(id: id) {
+            xml.method_missing(record_element, id: id) {
               execute[0][bind = binding]
               record = mapping.apply(record)
 

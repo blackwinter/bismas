@@ -30,10 +30,20 @@ module Bismas
 
     class XML < self
 
+      TYPES = %w[bismas solr]
+
+      def self.defaults
+        super.merge(type: TYPES.first)
+      end
+
       def run(arguments)
         quit unless arguments.empty?
 
-        Bismas.to_xml(options, &method(:quit))
+        if TYPES.include?(type = options[:type])
+          Bismas.to_xml(options, &method(:quit))
+        else
+          unsupported_type(type)
+        end
       end
 
       private
@@ -46,6 +56,10 @@ module Bismas
         opts.option(:output__FILE, 'Path to output file [Default: STDOUT]')
 
         opts.option(:schema__FILE, 'Path to schema file [Required]')
+
+        opts.separator
+
+        type_option(opts)
 
         opts.separator
 
