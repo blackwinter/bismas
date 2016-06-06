@@ -60,19 +60,20 @@ module Bismas
 
       reader_options = input_options(options, schema.category_length)
 
-      schema = mapping.apply(schema)
+      schema, encoding = mapping.apply(schema), options[:output_encoding]
 
       execute[0][bind1 = binding]
 
       File.open_file(options[:output], {}, 'wb') { |f|
         xml = Builder::XmlMarkup.new(indent: 2, target: f)
+        xml.instance_eval("@encoding = #{encoding.inspect}") if encoding
         xml.instruct!
 
         xml.method_missing(records_element, records_attributes) {
           Reader.parse_file(options[:input], reader_options) { |id, record|
             xml.method_missing(record_element, id: id) {
               execute[1][bind2 = binding]
-              record = mapping.apply(record)
+              record = mapping.apply(encode(record, encoding))
 
               execute[2][bind2]
               record.sort_by { |key,| key }.each { |key, values|
