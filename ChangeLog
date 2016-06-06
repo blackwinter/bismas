@@ -2,6 +2,13 @@
 
 = Revision history for bismas
 
+== 0.5.0 [2016-06-06]
+
+* +bismas2xml+: Learned type +solr+.
+* +bismas2xml+: Learned option +output-encoding+.
+* +bismas2xml+, +bismas-filter+: Learned options +execute-before+ and
+  +execute-after+.
+
 == 0.4.0 [2016-02-02]
 
 * +bismas2xml+: Include input file's modification time.
