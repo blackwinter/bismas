@@ -163,6 +163,7 @@ end
 
 require_relative 'bismas/xml'
 require_relative 'bismas/base'
+require_relative 'bismas/config'
 require_relative 'bismas/schema'
 require_relative 'bismas/reader'
 require_relative 'bismas/writer'
