@@ -15,7 +15,7 @@ begin
       homepage:     :blackwinter,
       dependencies: { cyclops: '~> 0.2', nuggets: '~> 1.5' },
 
-      required_ruby_version: '>= 2.0'
+      required_ruby_version: '>= 2.2'
     }
   }}
 rescue LoadError => err
